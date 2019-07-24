@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择图片</title>
+    <style>
+        #drop_area {
+            margin-top: 60px;
+            position: relative;
+            width: 350px;
+            height: auto;
+            border: 1px dashed rgb(204, 204, 204);
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #upload {
+            border: none;
+            width: 130px;
+            height: 30px;
+            background: linear-gradient(90deg, rgba(59, 167, 255, 1), rgba(105, 169, 254, 1));
+            border-radius: 17px;
+            color: white;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
+    <script src="/static/js/jquery-1.12.1.min.js"></script>
+</head>
+<body>
+
+
+<div id="drop_area" style="margin: 60px auto;position: relative">
+    <div style="display: none" class="change"></div>
+</div>
+
+<div style="margin-top: 10px;text-align: center">
+    <button id="upload">上传</button>
+</div>
+
+<form style="display: none" id="form" method="post" action="{{ url_for('utils.doupload') }}" enctype="multipart/form-data">
+    <input type="file" id="file" accept="image/*" required/>
+</form>
+
+
+<script src="/static/js/upload.js?v=7"></script>
+<script>
+    var imgFile;
+    $(document).ready(function () {
+        var dragImgUpload = new DragImgUpload("#drop_area", {
+            callback: function (files) {
+                //回调函数，可以传递给后台等等
+                var file = files[0];
+                if(file) console.log(file.name);
+
+                imgFile = file;
+                $('.change').show();
+            }
+        });
+    });
+
+    $('#upload').click(function () {
+        if (imgFile) {
+            $('#form').submit();
+        }
+        else
+            alert('请选择图片');
+    });
+</script>
+
+</body>
+</html>

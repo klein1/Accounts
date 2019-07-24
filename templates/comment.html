@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="/static/css/barrager.css">
+<div class="comment">
+    <input id="comment" type="text" placeholder="输入评论">
+</div>
+<script src="/static/js/jquery.barrager.min.js"></script>
+<script type="text/javascript" src="/static/js/socket.io.min.js"></script>
+<script>
+    $(function () {
+        var namespace = '/comment';
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+        $("#comment").keypress(function (e) {
+            if (e.which == 13) {
+                socket.emit('imessage', {data: encodeURI($('#comment').val())});
+                $('#comment').val('');
+            }
+        });
+
+        socket.on('message', function (msg) {
+            $('body').barrager({'href': '#', 'info': $('<div/>').text(decodeURI(msg.data)).html()});
+        });
+    });
+</script>
